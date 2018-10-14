@@ -1,0 +1,2 @@
+include ':app-demo',
+        ':styled-recycler-view'
