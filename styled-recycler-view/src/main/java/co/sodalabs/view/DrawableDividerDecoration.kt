@@ -21,7 +21,7 @@ class DrawableDividerDecoration(
 
     private val bounds = Rect()
 
-    override fun onDrawOver(
+    override fun onDraw(
         canvas: Canvas,
         parent: RecyclerView,
         state: RecyclerView.State
