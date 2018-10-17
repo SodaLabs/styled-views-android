@@ -49,17 +49,23 @@ class DrawableDividerDecoration(
     ) {
         canvas.save()
 
-        val left: Int
-        val right: Int
-        if (parent.clipToPadding) {
-            left = parent.paddingLeft
-            right = parent.width - parent.paddingRight
-            canvas.clipRect(left, parent.paddingTop, right,
-                parent.height - parent.paddingBottom)
-        } else {
-            left = 0
-            right = parent.width
-        }
+        // Consider clip-to-padding settings
+        //        val left: Int
+        //        val right: Int
+        //        if (parent.clipToPadding) {
+        //            left = parent.paddingLeft
+        //            right = parent.width - parent.paddingRight
+        //            canvas.clipRect(left, parent.paddingTop, right,
+        //                parent.height - parent.paddingBottom)
+        //        } else {
+        //            left = 0
+        //            right = parent.width
+        //        }
+
+        val left = parent.paddingLeft
+        val right = parent.width - parent.paddingRight
+        canvas.clipRect(left, parent.paddingTop, right,
+            parent.height - parent.paddingBottom)
 
         val childCount = parent.childCount
         for (i in 0 until childCount) {
