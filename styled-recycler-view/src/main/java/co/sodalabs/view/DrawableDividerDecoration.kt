@@ -4,6 +4,7 @@ import android.graphics.Canvas
 import android.graphics.Rect
 import android.graphics.drawable.Drawable
 import android.support.v7.widget.DividerItemDecoration
+import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 
@@ -31,6 +32,13 @@ class DrawableDividerDecoration(
         layoutManager?.let {
             when (layoutManager) {
                 is LinearLayoutManager -> {
+                    when (layoutManager.orientation) {
+                        RecyclerView.HORIZONTAL -> decorateHorizontally(canvas, parent)
+                        RecyclerView.VERTICAL -> decorateVertically(canvas, parent)
+                        else -> throw IllegalStateException("Unknown orientation")
+                    }
+                }
+                is GridLayoutManager -> {
                     when (layoutManager.orientation) {
                         RecyclerView.HORIZONTAL -> decorateHorizontally(canvas, parent)
                         RecyclerView.VERTICAL -> decorateVertically(canvas, parent)
