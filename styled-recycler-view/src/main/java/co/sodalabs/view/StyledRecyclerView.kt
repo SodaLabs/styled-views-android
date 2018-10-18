@@ -14,7 +14,7 @@ import co.sodalabs.R
  * @see [R.attr.rvDividerMode] There are [DividerMode.SHOW_DIVIDER_BEGINNING],
  * [DividerMode.SHOW_DIVIDER_MIDDLE], [DividerMode.SHOW_DIVIDER_END] and [DividerMode.SHOW_DIVIDER_NONE].
  */
-class StyledRecyclerView : RecyclerView {
+open class StyledRecyclerView : RecyclerView {
 
     constructor(context: Context) : this(context, null)
     constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0)
