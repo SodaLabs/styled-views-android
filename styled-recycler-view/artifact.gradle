@@ -26,7 +26,7 @@ if (System.getenv("CI")) {
         .withFromRef('git describe --abbrev=0 --tags'.execute().text.trim())
         .withToRef(REF_MASTER)
         .withTemplatePath("releasenotes.mustache")
-        .withUntaggedName("Version " + artifact_version)
+        .withUntaggedName("Styled-Recycler-View Ver. ${artifact_version}")
         .withNoIssueName("Other issues")
         .render()
 
@@ -34,9 +34,9 @@ if (System.getenv("CI")) {
         owner = 'SodaLabs'
         repo = 'styled-views-android'
         token = System.getenv('GITHUB_API_KEY')
-        tagName = 'v' + artifact_version
+        tagName = "${artifact_name}-v${artifact_version}"
         targetCommitish = 'master'
-        name = 'Release Version ' + artifact_version
+        name = "Styled-Recycler-View Ver. ${artifact_version}"
         body = log
     }
 }
