@@ -5,7 +5,7 @@
 
     <application
         android:name=".DemoApplication"
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
@@ -27,6 +27,21 @@
         <!-- Demo -->
         <activity
             android:name=".DemoActivity">
+        </activity>
+
+        <!-- RecyclerView Demo -->
+        <activity
+            android:name=".StyledRecyclerViewDemo">
+        </activity>
+
+        <!-- Switch Demo -->
+        <activity
+            android:name=".StyledSwitchViewDemo">
+        </activity>
+
+        <!-- Slider Demo -->
+        <activity
+            android:name=".StyledSliderViewDemo">
         </activity>
     </application>
 </manifest>
