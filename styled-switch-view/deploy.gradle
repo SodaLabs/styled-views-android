@@ -10,7 +10,7 @@ publish {
     userOrg = 'sodalabs'
     groupId = 'co.sodalabs'
     artifactId = project.name
-    publishVersion = project.styled_switch_view_artifact_version
+    publishVersion = project.styled_view_universal_artifact_version
 
     desc = ''
 

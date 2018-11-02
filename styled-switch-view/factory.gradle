@@ -6,7 +6,7 @@ android.libraryVariants.all { variant ->
 
     task(copyTaskName, type: Copy, dependsOn: assembleTaskName, group: "build") {
         variant.outputs.each { output ->
-            def newOutputName = "${project.styled_switch_view_artifact_name}-${project.styled_switch_view_artifact_version}.aar"
+            def newOutputName = "${project.styled_switch_view_artifact_name}-${project.styled_view_universal_artifact_version}.aar"
 
             println("> task ${copyTaskName}: copy ${output.outputFile.name} to $newOutputName")
 
