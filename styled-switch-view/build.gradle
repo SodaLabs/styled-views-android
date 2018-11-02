@@ -45,7 +45,7 @@ dependencies {
     api rootProject.ext.dep.kotlinStdlibJdk7
 
     // Project's core library
-    api project(path: ':styled-core')
+    compileOnly project(path: ':styled-core')
 
     // Unit tests.
     testImplementation rootProject.ext.dep.testJunit

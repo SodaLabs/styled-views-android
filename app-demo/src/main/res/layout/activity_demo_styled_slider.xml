@@ -45,9 +45,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar"
-        app:thumbDrawable="@drawable/default_slider_thumb"
-        app:trackBackgroundDrawable="@drawable/default_slider_background_track"
-        app:trackForegroundDrawable="@drawable/default_slider_foreground_track" />
+        app:slThumbDrawable="@drawable/default_slider_thumb"
+        app:slTrackBackgroundDrawable="@drawable/default_slider_background_track"
+        app:slTrackForegroundDrawable="@drawable/default_slider_foreground_track" />
 
     <co.sodalabs.view.StyledMarkerSliderView
         android:id="@+id/slMarker"
@@ -63,10 +63,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/slNormal"
-        app:markerDrawableEnd="@drawable/default_marker_slider_marker_end"
-        app:markerDrawableMiddle="@drawable/default_marker_slider_marker_middle"
-        app:markerDrawableStart="@drawable/default_marker_slider_marker_start"
-        app:markerNum="5"
-        app:thumbDrawable="@drawable/default_slider_thumb"
-        app:trackBackgroundDrawable="@drawable/default_slider_background_track" />
+        app:slMarkerDrawableEnd="@drawable/default_marker_slider_marker_end"
+        app:slMarkerDrawableMiddle="@drawable/default_marker_slider_marker_middle"
+        app:slMarkerDrawableStart="@drawable/default_marker_slider_marker_start"
+        app:slMarkerNum="5"
+        app:slThumbDrawable="@drawable/default_slider_thumb"
+        app:slTouchDragSlop="2dp"
+        app:slTrackBackgroundDrawable="@drawable/default_slider_background_track" />
 </android.support.constraint.ConstraintLayout>
