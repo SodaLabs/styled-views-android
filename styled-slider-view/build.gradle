@@ -12,8 +12,8 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
 
-        versionCode buildVersionCode(project.styled_slider_view_artifact_version)
-        versionName project.styled_slider_view_artifact_version
+        versionCode buildVersionCode(project.styled_view_universal_artifact_version)
+        versionName project.styled_view_universal_artifact_version
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
@@ -45,7 +45,7 @@ dependencies {
     api rootProject.ext.dep.kotlinStdlibJdk7
 
     // Project's core library
-    api project(path: ':styled-core')
+    compileOnly project(path: ':styled-core')
 
     // Unit tests.
     testImplementation rootProject.ext.dep.testJunit

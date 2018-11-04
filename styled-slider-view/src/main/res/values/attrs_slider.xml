@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="StyledSliderView">
-        <attr name="thumbDrawable" format="reference" />
-        <attr name="trackBackgroundDrawable" format="reference" />
-        <attr name="trackForegroundDrawable" format="reference" />
-        <attr name="markerDrawableMiddle" format="reference" />
-        <attr name="markerDrawableStart" format="reference" />
-        <attr name="markerDrawableEnd" format="reference" />
-        <attr name="markerNum" format="integer" />
+        <attr name="slTouchDragSlop" format="dimension" />
+        <attr name="slThumbDrawable" format="reference" />
+        <attr name="slTrackBackgroundDrawable" format="reference" />
+        <attr name="slTrackForegroundDrawable" format="reference" />
+        <attr name="slMarkerDrawableMiddle" format="reference" />
+        <attr name="slMarkerDrawableStart" format="reference" />
+        <attr name="slMarkerDrawableEnd" format="reference" />
+        <attr name="slMarkerNum" format="integer" />
     </declare-styleable>
 </resources>

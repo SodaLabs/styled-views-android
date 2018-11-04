@@ -1,3 +1,5 @@
+@file:Suppress("NOTHING_TO_INLINE")
+
 package co.sodalabs.view
 
 import android.content.Context
@@ -5,7 +7,7 @@ import android.content.res.TypedArray
 import android.graphics.drawable.Drawable
 import android.support.v7.content.res.AppCompatResources
 
-fun TypedArray.getCompatDrawable(
+inline fun TypedArray.getCompatDrawable(
     context: Context,
     stylableAttr: Int
 ): Drawable? {

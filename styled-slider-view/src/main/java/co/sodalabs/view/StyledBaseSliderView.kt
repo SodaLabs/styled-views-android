@@ -13,13 +13,13 @@ import co.sodalabs.view.slider.R
 /**
  * The base slider view
  *
- * @see [R.attr.thumbDrawable] The thumb drawable.
- * @see [R.attr.trackBackgroundDrawable] The track (a.k.a progress, but only the background part) drawable.
- * @see [R.attr.markerDrawableMiddle] The marker (tick) drawable in the middle.
- * @see [R.attr.markerDrawableStart] The marker (tick) drawable at the start.
- * @see [R.attr.markerDrawableEnd] The marker (tick) drawable at the end.
- * @see [R.attr.markerNum] The amount of markers on the track. The markers are distributed evenly spaced.
- * @see [R.attr.touchDragSlop] A slop where the touch forms a drag if the move distance is over.
+ * @see [R.attr.slThumbDrawable] The thumb drawable.
+ * @see [R.attr.slTrackBackgroundDrawable] The track (a.k.a progress, but only the background part) drawable.
+ * @see [R.attr.slMarkerDrawableMiddle] The marker (tick) drawable in the middle.
+ * @see [R.attr.slMarkerDrawableStart] The marker (tick) drawable at the start.
+ * @see [R.attr.slMarkerDrawableEnd] The marker (tick) drawable at the end.
+ * @see [R.attr.slMarkerNum] The amount of markers on the track. The markers are distributed evenly spaced.
+ * @see [R.attr.slTouchDragSlop] A slop where the touch forms a drag if the move distance is over.
  */
 abstract class StyledBaseSliderView : AppCompatSeekBar {
 
@@ -57,7 +57,7 @@ abstract class StyledBaseSliderView : AppCompatSeekBar {
 
     protected var touchStartX: Float = 0f
     protected var touchDragging: Boolean = false
-    protected var touchDragSlop: Float = context.resources.getDimension(co.sodalabs.view.R.dimen.default_touch_drag_slop)
+    protected var touchDragSlop: Float = context.resources.getDimension(R.dimen.default_touch_drag_slop)
 
     protected val tmpBound = RectF()
 
@@ -70,22 +70,7 @@ abstract class StyledBaseSliderView : AppCompatSeekBar {
         // Force original thumb null
         thumb = null
 
-        initCommonProperties(attrs)
         initProperties(attrs)
-    }
-
-    private fun initCommonProperties(attrs: AttributeSet?) {
-        val typedArray = context.theme.obtainStyledAttributes(
-            attrs,
-            R.styleable.StyledViewCommon, 0, 0)
-
-        for (i in 0 until typedArray.indexCount) {
-            when (typedArray.getIndex(i)) {
-                R.styleable.StyledViewCommon_touchDragSlop -> touchDragSlop = typedArray.getDimension(R.styleable.StyledViewCommon_touchDragSlop, touchDragSlop)
-            }
-        }
-
-        typedArray.recycle()
     }
 
     private fun initProperties(attrs: AttributeSet?) {
@@ -100,17 +85,20 @@ abstract class StyledBaseSliderView : AppCompatSeekBar {
 
         for (i in 0 until typedArray.indexCount) {
             when (typedArray.getIndex(i)) {
-                R.styleable.StyledSliderView_thumbDrawable -> {
+                R.styleable.StyledSliderView_slThumbDrawable -> {
                     thumbDrawable = typedArray.getCompatDrawable(context,
-                        R.styleable.StyledSliderView_thumbDrawable)
+                        R.styleable.StyledSliderView_slThumbDrawable)
                 }
-                R.styleable.StyledSliderView_trackForegroundDrawable -> {
+                R.styleable.StyledSliderView_slTrackForegroundDrawable -> {
                     trackForegroundDrawable = typedArray.getCompatDrawable(context,
-                        R.styleable.StyledSliderView_trackForegroundDrawable)
+                        R.styleable.StyledSliderView_slTrackForegroundDrawable)
                 }
-                R.styleable.StyledSliderView_trackBackgroundDrawable -> {
+                R.styleable.StyledSliderView_slTrackBackgroundDrawable -> {
                     trackBackgroundDrawable = typedArray.getCompatDrawable(context,
-                        R.styleable.StyledSliderView_trackBackgroundDrawable)
+                        R.styleable.StyledSliderView_slTrackBackgroundDrawable)
+                }
+                R.styleable.StyledSliderView_slTouchDragSlop -> {
+                    touchDragSlop = typedArray.getDimension(R.styleable.StyledSliderView_slTouchDragSlop, touchDragSlop)
                 }
             }
         }

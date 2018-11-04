@@ -164,7 +164,7 @@ class StyledSwitchView : ToggleableView {
     private var touchStartX: Float = 0f
     private var touchStartTime: Long = 0
     private var touchDragging: Boolean = false
-    private var touchDragSlop: Float = context.resources.getDimension(co.sodalabs.view.R.dimen.default_touch_drag_slop)
+    private var touchDragSlop: Float = context.resources.getDimension(R.dimen.default_touch_drag_slop)
 
     private val alphaOn: Float
         get() {
@@ -196,16 +196,6 @@ class StyledSwitchView : ToggleableView {
         paint.strokeJoin = Paint.Join.MITER
     }
 
-    private fun initCommonProperties(attrs: AttributeSet?) {
-        val attributes = context.theme.obtainStyledAttributes(attrs, R.styleable.StyledViewCommon, 0, 0)
-        for (i in 0 until attributes.indexCount) {
-            when (attributes.getIndex(i)) {
-                R.styleable.StyledViewCommon_touchDragSlop -> touchDragSlop = attributes.getDimension(R.styleable.StyledViewCommon_touchDragSlop, touchDragSlop)
-            }
-        }
-        attributes.recycle()
-    }
-
     private fun initProperties(attrs: AttributeSet?) {
         val attributes = context.theme.obtainStyledAttributes(attrs, R.styleable.StyledSwitchView, 0, 0)
         for (i in 0 until attributes.indexCount) {
@@ -229,6 +219,8 @@ class StyledSwitchView : ToggleableView {
                     backgroundColorOff)
                 R.styleable.StyledSwitchView_swThumbColorOn -> thumbColorOn = attributes.getColor(R.styleable.StyledSwitchView_swThumbColorOn, thumbColorOn)
                 R.styleable.StyledSwitchView_swThumbColorOff -> thumbColorOff = attributes.getColor(R.styleable.StyledSwitchView_swThumbColorOff, thumbColorOff)
+                R.styleable.StyledSwitchView_swTouchDragSlop -> touchDragSlop = attributes.getDimension(R.styleable.StyledSwitchView_swTouchDragSlop,
+                    touchDragSlop)
             }
         }
         attributes.recycle()

@@ -51,5 +51,5 @@
         app:swTextColorOn="#D6E0E4"
         app:swThumbColorOff="#D6E0E4"
         app:swThumbColorOn="#D6E0E4"
-        app:touchDragSlop="2dp" />
+        app:swTouchDragSlop="2dp" />
 </android.support.constraint.ConstraintLayout>

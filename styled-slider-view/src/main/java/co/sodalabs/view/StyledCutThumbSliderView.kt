@@ -13,10 +13,10 @@ import co.sodalabs.view.slider.R
 /**
  * A capsule track slider.
  *
- * @see [R.attr.thumbDrawable] The thumb drawable.
- * @see [R.attr.trackForegroundDrawable] The foreground track drawable.
- * @see [R.attr.trackBackgroundDrawable] The background track (a.k.a progress, but only the background part) drawable.
- * @see [R.attr.touchDragSlop] A slop where the touch forms a drag if the move distance is over.
+ * @see [R.attr.slThumbDrawable] The thumb drawable.
+ * @see [R.attr.slTrackForegroundDrawable] The foreground track drawable.
+ * @see [R.attr.slTrackBackgroundDrawable] The background track (a.k.a progress, but only the background part) drawable.
+ * @see [R.attr.slTouchDragSlop] A slop where the touch forms a drag if the move distance is over.
  */
 class StyledCutThumbSliderView : StyledBaseSliderView {
 

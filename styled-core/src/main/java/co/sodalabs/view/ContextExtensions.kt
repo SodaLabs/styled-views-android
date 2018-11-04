@@ -1,3 +1,5 @@
+@file:Suppress("NOTHING_TO_INLINE")
+
 package co.sodalabs.view
 
 import android.content.Context
@@ -7,7 +9,7 @@ import android.os.Build
 import android.support.v4.content.ContextCompat
 import android.support.v4.graphics.drawable.DrawableCompat
 
-fun Context.getBitmapFromVectorDrawable(drawableId: Int): Bitmap {
+inline fun Context.getBitmapFromVectorDrawable(drawableId: Int): Bitmap {
     var drawable = ContextCompat.getDrawable(this, drawableId)
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
         drawable = DrawableCompat.wrap(drawable!!).mutate()
