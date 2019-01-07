@@ -8,9 +8,7 @@ import android.os.Build
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.AppCompatSeekBar
 import android.util.AttributeSet
-import android.view.MotionEvent
 import android.widget.ProgressBar
-import android.widget.SeekBar
 import co.sodalabs.view.slider.R
 
 /**
@@ -63,7 +61,6 @@ abstract class StyledBaseSliderView : AppCompatSeekBar {
     protected var touchDragSlop: Float = context.resources.getDimension(R.dimen.default_touch_drag_slop)
 
     protected val tmpBound = RectF()
-    protected var isTrackingTouch = false
 
     protected val progressInternalMethod by lazy {
         val clazz = ProgressBar::class.java
@@ -130,13 +127,7 @@ abstract class StyledBaseSliderView : AppCompatSeekBar {
         typedArray.recycle()
     }
 
-    override fun onLayout(
-        changed: Boolean,
-        left: Int,
-        top: Int,
-        right: Int,
-        bottom: Int
-    ) {
+    override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
         super.onLayout(changed, left, top, right, bottom)
 
         if (changed) {
@@ -211,138 +202,5 @@ abstract class StyledBaseSliderView : AppCompatSeekBar {
      */
     protected open fun drawThumb(canvas: Canvas) {
         // DO NOTHING
-    }
-
-    override fun onTouchEvent(event: MotionEvent): Boolean {
-        if (!isEnabled) {
-            return false
-        }
-
-        when (event.action) {
-            MotionEvent.ACTION_DOWN -> {
-                touchStartX = event.x
-                onStartTrackingTouch()
-                return true
-            }
-
-            MotionEvent.ACTION_MOVE -> {
-                if (!touchDragging) {
-                    touchDragging = isTouchDrag(event.x)
-                }
-
-                if (touchDragging) {
-                    val x = constraintTouchX(
-                        touchX = event.x,
-                        from = thumbStartX,
-                        to = thumbEndX)
-
-                    val prog = positionToIntProgress(x)
-                    callProgressInternal(prog, true)
-                }
-
-                if (!isTrackingTouch) {
-                    onStartTrackingTouch()
-                }
-
-                return true
-            }
-
-            MotionEvent.ACTION_CANCEL,
-            MotionEvent.ACTION_UP -> {
-                if (!isTrackingTouch) {
-                    onStartTrackingTouch()
-                }
-
-                touchDragging = false
-                onStopTrackingTouch()
-
-                val x = constraintTouchX(
-                    touchX = event.x,
-                    from = thumbStartX,
-                    to = thumbEndX)
-
-                val prog = positionToIntProgress(x)
-                callProgressInternal(prog, true)
-
-                return true
-            }
-
-            else -> return false
-        }
-    }
-
-    protected fun onStartTrackingTouch() {
-        if (isTrackingTouch) return
-
-        isTrackingTouch = true
-        touchTrackingDelegateListener.onStartTrackingTouch(this)
-    }
-
-    protected fun onStopTrackingTouch() {
-        if (!isTrackingTouch) return
-
-        isTrackingTouch = false
-        touchTrackingDelegateListener.onStopTrackingTouch(this)
-    }
-
-    protected fun callProgressInternal(progress: Int, fromUser: Boolean, animate: Boolean = false) {
-        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.M) {
-            progressInternalMethod.invoke(this, progress, fromUser)
-        } else {
-            progressInternalMethod.invoke(this, progress, fromUser, animate)
-        }
-    }
-
-    protected fun isTouchDrag(touchX: Float): Boolean {
-        return Math.abs(touchX - touchStartX) > touchDragSlop
-    }
-
-    protected fun constraintTouchX(touchX: Float, from: Float, to: Float): Float {
-        return if (touchX < from) {
-            from
-        } else {
-            if (touchX > to) {
-                to
-            } else {
-                touchX
-            }
-        }
-    }
-
-    protected fun positionToIntProgress(thumbX: Float): Int {
-        return Math.round(max.toFloat() * (thumbX - thumbStartX) / (thumbEndX - thumbStartX))
-    }
-
-    /**
-     * A wrapper listener dispatching [IStyledSliderListener] callbacks.
-     */
-    private val touchTrackingDelegateListener = WrapperListener()
-
-    /**
-     * Redirect the given [SeekBar.OnSeekBarChangeListener] to [touchTrackingDelegateListener].
-     */
-    override fun setOnSeekBarChangeListener(l: OnSeekBarChangeListener?) {
-        touchTrackingDelegateListener.actualListener = l
-        super.setOnSeekBarChangeListener(if (l != null) touchTrackingDelegateListener else null)
-    }
-
-    /**
-     * The [IStyledSliderListener] wrapper class.
-     */
-    private class WrapperListener(
-        var actualListener: SeekBar.OnSeekBarChangeListener? = null
-    ) : OnSeekBarChangeListener {
-
-        override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-            actualListener?.onProgressChanged(seekBar, progress, fromUser)
-        }
-
-        override fun onStartTrackingTouch(seekBar: SeekBar) {
-            actualListener?.onStartTrackingTouch(seekBar)
-        }
-
-        override fun onStopTrackingTouch(seekBar: SeekBar) {
-            actualListener?.onStopTrackingTouch(seekBar)
-        }
     }
 }
