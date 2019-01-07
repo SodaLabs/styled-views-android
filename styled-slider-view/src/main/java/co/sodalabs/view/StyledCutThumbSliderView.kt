@@ -81,7 +81,7 @@ class StyledCutThumbSliderView : StyledBaseSliderView {
             // Therefore, it's a workaround to imitate the final visual.
             val thumbWidth = thumbBitmap?.width ?: 0
             val thumbHeight = thumbBitmap?.height ?: 0
-            val progressFloat = this.progress.toFloat() / 100f
+            val progressFloat = this.progress.toFloat() / max.toFloat()
             val thumbX = -thumbWidth + progressFloat * thumbEndX + (1f - progressFloat) * thumbStartX
             val thumbY = (height - thumbHeight) / 2f
 
@@ -92,7 +92,7 @@ class StyledCutThumbSliderView : StyledBaseSliderView {
         } else {
             val thumbWidth = thumbBitmap?.width ?: 0
             val thumbHeight = thumbBitmap?.height ?: 0
-            val progressFloat = this.progress.toFloat() / 100f
+            val progressFloat = this.progress.toFloat() / max.toFloat()
             //        val thumbX = progressFloat * thumbEndX + (1f - progressFloat) * thumbStartX
             val thumbX = -thumbWidth + progressFloat * (mergedBitmap?.width?.toFloat() ?: 0f)
             val thumbY = (height - thumbHeight) / 2f

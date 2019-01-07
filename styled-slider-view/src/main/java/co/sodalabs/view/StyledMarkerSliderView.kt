@@ -77,6 +77,9 @@ open class StyledMarkerSliderView : StyledBaseSliderView {
         markerDrawableMiddle = ContextCompat.getDrawable(context, R.drawable.default_marker_slider_marker_middle)
         markerDrawableStart = ContextCompat.getDrawable(context, R.drawable.default_marker_slider_marker_start)
         markerDrawableEnd = ContextCompat.getDrawable(context, R.drawable.default_marker_slider_marker_end)
+        // By default, add one marker per value.
+        // Plus an additional one for zero value
+        updateMarkerCount()
 
         for (i in 0 until typedArray.indexCount) {
             when (typedArray.getIndex(i)) {
@@ -91,6 +94,17 @@ open class StyledMarkerSliderView : StyledBaseSliderView {
         }
 
         typedArray.recycle()
+    }
+
+    private fun updateMarkerCount() {
+        println("MarkerNum: $markerNum | Max: $max")
+        markerNum = max + 1
+    }
+
+    override fun setMax(max: Int) {
+        super.setMax(max)
+        updateMarkerCount()
+        invalidate()
     }
 
     override fun onLayout(
@@ -138,7 +152,7 @@ open class StyledMarkerSliderView : StyledBaseSliderView {
 
     override fun drawThumb(canvas: Canvas) {
         val viewHeight = height.toFloat()
-        val progressFloat = this.progress.toFloat() / 100f
+        val progressFloat = this.progress.toFloat() / max.toFloat()
         val thumbX = progressFloat * thumbEndX + (1f - progressFloat) * thumbStartX
 
         canvas.runSafely {
@@ -250,7 +264,7 @@ open class StyledMarkerSliderView : StyledBaseSliderView {
             callProgressInternal(prog, true)
         }
         thumbAnimator?.interpolator = AccelerateDecelerateInterpolator()
-        thumbAnimator?.duration = (450 * (Math.abs(currentProgress - nextProgress) / 100f)).toLong()
+        thumbAnimator?.duration = (450 * (Math.abs(currentProgress - nextProgress) / max.toFloat())).toLong()
         thumbAnimator?.start()
     }
 

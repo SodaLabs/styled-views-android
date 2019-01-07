@@ -40,7 +40,8 @@
         android:minHeight="@dimen/slider_min_height"
         android:paddingBottom="30dp"
         android:paddingTop="30dp"
-        android:progress="50"
+        android:progress="100"
+        android:max="200"
         app:layout_constraintBottom_toTopOf="@+id/slMarker"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -48,6 +49,40 @@
         app:slThumbDrawable="@drawable/default_slider_thumb"
         app:slTrackBackgroundDrawable="@drawable/default_slider_background_track"
         app:slTrackForegroundDrawable="@drawable/default_slider_foreground_track" />
+
+    <TextView
+        android:id="@+id/labelSlNormal"
+        app:layout_constraintTop_toBottomOf="@id/slNormal"
+        app:layout_constraintStart_toStartOf="@id/slNormal"
+        app:layout_constraintEnd_toEndOf="@id/slNormal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        tools:text="Current/Max - 100/200"/>
+
+    <ImageButton
+        android:id="@+id/buttonAddSlNormal"
+        android:layout_margin="8dp"
+        app:layout_constraintEnd_toStartOf="@id/labelSlNormal"
+        app:layout_constraintTop_toTopOf="@id/labelSlNormal"
+        app:layout_constraintBottom_toBottomOf="@id/labelSlNormal"
+        android:background="@null"
+        android:tint="@color/white"
+        app:srcCompat="@drawable/ic_add"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <ImageButton
+        android:id="@+id/buttonSubtractSlNormal"
+        app:layout_constraintStart_toEndOf="@id/labelSlNormal"
+        app:layout_constraintTop_toTopOf="@id/labelSlNormal"
+        app:layout_constraintBottom_toBottomOf="@id/labelSlNormal"
+        android:layout_margin="8dp"
+        android:background="@null"
+        android:tint="@color/white"
+        app:srcCompat="@drawable/ic_remove"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
     <co.sodalabs.view.StyledMarkerSliderView
         android:id="@+id/slMarker"
@@ -58,7 +93,8 @@
         android:minHeight="@dimen/slider_min_height"
         android:paddingBottom="30dp"
         android:paddingTop="30dp"
-        android:progress="50"
+        android:progress="2"
+        android:max="4"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -66,8 +102,42 @@
         app:slMarkerDrawableEnd="@drawable/default_marker_slider_marker_end"
         app:slMarkerDrawableMiddle="@drawable/default_marker_slider_marker_middle"
         app:slMarkerDrawableStart="@drawable/default_marker_slider_marker_start"
-        app:slMarkerNum="5"
         app:slThumbDrawable="@drawable/default_slider_thumb"
         app:slTouchDragSlop="2dp"
         app:slTrackBackgroundDrawable="@drawable/default_slider_background_track" />
+
+    <TextView
+        android:id="@+id/labelSlMarker"
+        app:layout_constraintTop_toBottomOf="@id/slMarker"
+        app:layout_constraintStart_toStartOf="@id/slMarker"
+        app:layout_constraintEnd_toEndOf="@id/slMarker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        tools:text="Current/Max - 2/4"/>
+
+    <ImageButton
+        android:id="@+id/buttonAddSlMarker"
+        android:layout_margin="8dp"
+        app:layout_constraintEnd_toStartOf="@id/labelSlMarker"
+        app:layout_constraintTop_toTopOf="@id/labelSlMarker"
+        app:layout_constraintBottom_toBottomOf="@id/labelSlMarker"
+        android:background="@null"
+        android:tint="@color/white"
+        app:srcCompat="@drawable/ic_add"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <ImageButton
+        android:id="@+id/buttonSubtractSlMarker"
+        app:layout_constraintStart_toEndOf="@id/labelSlMarker"
+        app:layout_constraintTop_toTopOf="@id/labelSlMarker"
+        app:layout_constraintBottom_toBottomOf="@id/labelSlMarker"
+        android:layout_margin="8dp"
+        android:background="@null"
+        android:tint="@color/white"
+        app:srcCompat="@drawable/ic_remove"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
 </android.support.constraint.ConstraintLayout>

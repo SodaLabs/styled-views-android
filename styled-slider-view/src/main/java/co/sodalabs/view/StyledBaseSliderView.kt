@@ -195,7 +195,7 @@ abstract class StyledBaseSliderView : AppCompatSeekBar {
         canvas.runSafely {
             translate(paddingLeft, paddingRight)
 
-            val progressFloat = progress.toFloat() / 100f
+            val progressFloat = progress.toFloat() / max.toFloat()
             val drawableBound = trackForegroundDrawable?.bounds
             val clipWidth = (drawableBound?.width()?.toFloat() ?: 0f) * progressFloat
             val clipHeight = drawableBound?.height()?.toFloat() ?: 0f
@@ -310,7 +310,7 @@ abstract class StyledBaseSliderView : AppCompatSeekBar {
     }
 
     protected fun positionToIntProgress(thumbX: Float): Int {
-        return Math.round(100f * (thumbX - thumbStartX) / (thumbEndX - thumbStartX))
+        return Math.round(max.toFloat() * (thumbX - thumbStartX) / (thumbEndX - thumbStartX))
     }
 
     /**
