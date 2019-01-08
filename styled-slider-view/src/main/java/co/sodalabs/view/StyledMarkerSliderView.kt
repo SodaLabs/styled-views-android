@@ -1,14 +1,10 @@
 package co.sodalabs.view
 
-import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.drawable.Drawable
 import android.support.v4.content.ContextCompat
 import android.util.AttributeSet
-import android.view.MotionEvent
-import android.view.animation.AccelerateDecelerateInterpolator
-import android.widget.SeekBar
 import co.sodalabs.view.slider.R
 
 /**
@@ -29,9 +25,6 @@ open class StyledMarkerSliderView : StyledBaseSliderView {
             field = value
             onUpdateMarkerProperties()
         }
-
-    // Thumb
-    private var thumbAnimator: ValueAnimator? = null
 
     // Marker
     private var markerDrawableMiddle: Drawable? = null
@@ -107,13 +100,7 @@ open class StyledMarkerSliderView : StyledBaseSliderView {
         invalidate()
     }
 
-    override fun onLayout(
-        changed: Boolean,
-        left: Int,
-        top: Int,
-        right: Int,
-        bottom: Int
-    ) {
+    override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
         super.onLayout(changed, left, top, right, bottom)
 
         if (changed) {
@@ -175,136 +162,6 @@ open class StyledMarkerSliderView : StyledBaseSliderView {
 
                 translate(markerDistance, 0f)
             }
-        }
-    }
-
-    override fun onTouchEvent(event: MotionEvent): Boolean {
-        if (!isEnabled) {
-            return false
-        }
-
-        when (event.action) {
-            MotionEvent.ACTION_DOWN -> {
-                touchStartX = event.x
-                onStartTrackingTouch()
-                return true
-            }
-
-            MotionEvent.ACTION_MOVE -> {
-                if (!touchDragging) {
-                    touchDragging = isTouchDrag(event.x)
-                }
-
-                if (touchDragging) {
-                    val x = constraintTouchX(
-                        touchX = event.x,
-                        from = thumbStartX,
-                        to = thumbEndX)
-
-                    val prog = positionToIntProgress(x)
-                    callProgressInternal(prog, true)
-                }
-
-                if (!isTrackingTouch) {
-                    onStartTrackingTouch()
-                }
-
-                return true
-            }
-
-            MotionEvent.ACTION_CANCEL,
-            MotionEvent.ACTION_UP -> {
-                if (!isTrackingTouch) {
-                    onStartTrackingTouch()
-                }
-
-                touchDragging = false
-                onStopTrackingTouch()
-
-                val (closestX, closestIndex) = findClosestMarkerXAndIndex(event.x)
-                snapToClosestMarkerSmoothly(closestX)
-
-                // Dispatch callback
-                progressDelegateListener.onMarkerLevelUpdated(
-                    seekBar = this,
-                    markerLevel = closestIndex)
-
-                return true
-            }
-
-            else -> return false
-        }
-    }
-
-    private fun findClosestMarkerXAndIndex(touchX: Float): Pair<Float, Int> {
-        var closestX = thumbStartX
-        var closestIndex = 0
-        var closestDistance = Math.abs(touchX - closestX)
-        for (i in 1 until markerNum) {
-            val markerX = thumbStartX + i * markerDistance
-            val distance = Math.abs(touchX - markerX)
-            if (distance < closestDistance) {
-                closestX = markerX
-                closestIndex = i
-                closestDistance = distance
-            }
-        }
-
-        return Pair(closestX, closestIndex)
-    }
-
-    private fun snapToClosestMarkerSmoothly(closestX: Float) {
-        val currentProgress = progress
-        val nextProgress = positionToIntProgress(closestX)
-
-        thumbAnimator?.cancel()
-        thumbAnimator = ValueAnimator.ofInt(currentProgress, nextProgress)
-        thumbAnimator?.addUpdateListener { animator ->
-            val prog = animator.animatedValue as Int
-            callProgressInternal(prog, true)
-        }
-        thumbAnimator?.interpolator = AccelerateDecelerateInterpolator()
-        thumbAnimator?.duration = (450 * (Math.abs(currentProgress - nextProgress) / max.toFloat())).toLong()
-        thumbAnimator?.start()
-    }
-
-    /**
-     * A wrapper listener dispatching [IStyledSliderListener] callbacks.
-     */
-    private val progressDelegateListener = WrapperListener()
-
-    /**
-     * Redirect the given [SeekBar.OnSeekBarChangeListener] to [progressDelegateListener].
-     */
-    override fun setOnSeekBarChangeListener(l: OnSeekBarChangeListener?) {
-        progressDelegateListener.actualListener = l
-        super.setOnSeekBarChangeListener(if (l != null) progressDelegateListener else null)
-    }
-
-    /**
-     * The [IStyledSliderListener] wrapper class.
-     */
-    private class WrapperListener(
-        var actualListener: SeekBar.OnSeekBarChangeListener? = null
-    ) : IStyledSliderListener {
-
-        override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-            actualListener?.onProgressChanged(seekBar, progress, fromUser)
-        }
-
-        override fun onMarkerLevelUpdated(seekBar: SeekBar, markerLevel: Int) {
-            val actual = actualListener
-            if (actual is IStyledSliderListener) {
-                actual.onMarkerLevelUpdated(seekBar, 0)
-            }
-        }
-
-        override fun onStartTrackingTouch(seekBar: SeekBar) {
-            actualListener?.onStartTrackingTouch(seekBar)
-        }
-
-        override fun onStopTrackingTouch(seekBar: SeekBar) {
-            actualListener?.onStopTrackingTouch(seekBar)
         }
     }
 }

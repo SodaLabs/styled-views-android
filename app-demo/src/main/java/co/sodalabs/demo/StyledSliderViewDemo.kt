@@ -3,7 +3,6 @@ package co.sodalabs.demo
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.widget.SeekBar
-import co.sodalabs.view.IStyledSliderListener
 import kotlinx.android.synthetic.main.activity_demo_styled_slider.buttonAddSlMarker
 import kotlinx.android.synthetic.main.activity_demo_styled_slider.buttonAddSlNormal
 import kotlinx.android.synthetic.main.activity_demo_styled_slider.buttonSubtractSlMarker
@@ -48,12 +47,7 @@ class StyledSliderViewDemo : AppCompatActivity() {
         updateNormalSeekbarLabels(slNormal)
         updateMarkerSeekbarLabels(slMarker)
 
-        slNormal.setOnSeekBarChangeListener(object : IStyledSliderListener {
-            override fun onMarkerLevelUpdated(seekBar: SeekBar, markerLevel: Int) {
-                println("onMarkerLevelUpdated, markerLevel=$markerLevel")
-                updateNormalSeekbarLabels(seekBar)
-            }
-
+        slNormal.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
                 println("onProgressChanged, progress=$progress")
                 updateNormalSeekbarLabels(seekBar)
@@ -68,12 +62,7 @@ class StyledSliderViewDemo : AppCompatActivity() {
             }
         })
 
-        slMarker.setOnSeekBarChangeListener(object : IStyledSliderListener {
-            override fun onMarkerLevelUpdated(seekBar: SeekBar, markerLevel: Int) {
-                println("onMarkerLevelUpdated, markerLevel=$markerLevel")
-                updateMarkerSeekbarLabels(seekBar)
-            }
-
+        slMarker.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
                 println("onProgressChanged, progress=$progress")
                 updateMarkerSeekbarLabels(seekBar)
