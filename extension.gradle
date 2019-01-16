@@ -3,16 +3,22 @@ rootProject.ext {
         def majorMinorBuild = version.tokenize(".")
         def vCode = 0
         def powerOfTen = 1
+        // This multiplier defines the MAX value that any one of the semantic version codes can have
+        // For example, we will never allow 1.1.10323, instead we would increase to 1.2.0
         def multiplier = 1000
-        def baseVersionCode = multiplier**Math.max(majorMinorBuild.size() - 1, 0)
-        majorMinorBuild.reverse().eachWithIndex() { obj, i -> (vCode += (obj.toInteger() * powerOfTen)); powerOfTen *= multiplier }
+
+        majorMinorBuild.reverse().eachWithIndex() { obj, i ->
+            def semanticVersionPart = obj.toInteger()
+
+            // Accumulate the version code
+            vCode += (semanticVersionPart * powerOfTen)
+
+            // Multiple up to group the semantic versioning parts
+            powerOfTen *= multiplier
+        }
 
         logger.info("Build version code [" + vCode + "] from version name [" + version + "].")
 
-        if (vCode < baseVersionCode) {
-            return vCode + baseVersionCode
-        } else {
-            return vCode
-        }
+        return vCode
     }
 }
