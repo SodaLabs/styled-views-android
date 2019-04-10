@@ -5,6 +5,7 @@ import android.graphics.Canvas
 import android.graphics.drawable.Drawable
 import android.support.v4.content.ContextCompat
 import android.util.AttributeSet
+import android.view.MotionEvent
 import co.sodalabs.view.slider.R
 
 /**
@@ -133,6 +134,17 @@ open class StyledMarkerSliderView : StyledBaseSliderView {
         }
     }
 
+    // Touch //////////////////////////////////////////////////////////////////
+
+    override fun trackTouchEvent(event: MotionEvent) {
+        super.trackTouchEvent(event)
+
+        // Constraint the thumb position
+        touchX = Math.max(thumbStartX, Math.min(thumbEndX, touchX))
+    }
+
+    // Rendering //////////////////////////////////////////////////////////////
+
     override fun onDraw(canvas: Canvas) {
         drawTrack(canvas)
         drawMarker(canvas)
@@ -141,12 +153,19 @@ open class StyledMarkerSliderView : StyledBaseSliderView {
 
     override fun drawThumb(canvas: Canvas) {
         val viewHeight = height.toFloat()
-        val progressFloat = this.progress.toFloat() / max.toFloat()
-        val thumbX = progressFloat * thumbEndX + (1f - progressFloat) * thumbStartX
+        if (isDragging()) {
+            canvas.runSafely {
+                translate(touchX, viewHeight / 2f)
+                thumbDrawable?.draw(canvas)
+            }
+        } else {
+            val progressFloat = this.progress.toFloat() / max.toFloat()
+            val thumbX = progressFloat * thumbEndX + (1f - progressFloat) * thumbStartX
 
-        canvas.runSafely {
-            translate(thumbX, viewHeight / 2f)
-            thumbDrawable?.draw(canvas)
+            canvas.runSafely {
+                translate(thumbX, viewHeight / 2f)
+                thumbDrawable?.draw(canvas)
+            }
         }
     }
 

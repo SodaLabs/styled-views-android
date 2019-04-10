@@ -7,7 +7,9 @@ import android.graphics.drawable.Drawable
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.AppCompatSeekBar
 import android.util.AttributeSet
+import android.view.MotionEvent
 import co.sodalabs.view.slider.R
+import kotlin.math.roundToInt
 
 /**
  * The base slider view
@@ -56,6 +58,9 @@ abstract class StyledBaseSliderView : AppCompatSeekBar {
 
     val tmpBound = RectF()
 
+    // FIXME: Expose the XML configuration for this property.
+    protected val scaledDragSlop by lazy { context.resources.getDimensionPixelSize(R.dimen.default_touch_drag_slop) }
+
     constructor(context: Context) : this(context, null)
     constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0)
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
@@ -103,6 +108,113 @@ abstract class StyledBaseSliderView : AppCompatSeekBar {
             ensureTrackDrawableBoundary(trackForegroundDrawable)
         }
     }
+
+    // Touch //////////////////////////////////////////////////////////////////
+
+    protected var touchDownX: Float = -1f
+    protected var touchX: Float = 0f
+
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+        if (!isEnabled) return false
+
+        val action = event.actionMasked
+        when (action) {
+            MotionEvent.ACTION_DOWN -> {
+                if (isInScrollingContainerCompat()) {
+                    touchDownX = event.x
+                } else {
+                    isPressed = true
+                    onStartTrackingTouch()
+                    trackTouchEvent(event)
+                    attemptClaimDrag()
+
+                    // The thumb position might have changed and need to repaint.
+                    invalidate()
+                }
+            }
+            MotionEvent.ACTION_MOVE -> {
+                if (isDragging()) {
+                    trackTouchEvent(event)
+                } else {
+                    val x = event.x
+                    if (Math.abs(x - touchDownX) > scaledDragSlop) {
+                        isPressed = true
+                        onStartTrackingTouch()
+                        trackTouchEvent(event)
+                        attemptClaimDrag()
+                    }
+                }
+                invalidate()
+            }
+            MotionEvent.ACTION_UP -> {
+                if (isDragging()) {
+                    trackTouchEvent(event)
+                    onStopTrackingTouch()
+                    isPressed = false
+                } else {
+                    // Touch up when we never crossed the touch slop threshold should
+                    // be interpreted as a tap-seek to that location.
+                    onStartTrackingTouch()
+                    trackTouchEvent(event)
+                    onStopTrackingTouch()
+                }
+                // ProgressBar doesn't know to repaint the thumb drawable
+                // in its inactive state when the touch stops (because the
+                // value has not apparently changed)
+                invalidate()
+            }
+            MotionEvent.ACTION_CANCEL -> {
+                if (isDragging()) {
+                    onStopTrackingTouch()
+                    isPressed = false
+                }
+                invalidate() // see above explanation
+            }
+        }
+
+        return true
+    }
+
+    protected open fun trackTouchEvent(event: MotionEvent) {
+        val available = thumbEndX - thumbStartX
+        val x = event.x.toInt()
+        val newProgress = if (isLayoutRtl() && isMirrorForRtl()) {
+            when {
+                x < thumbStartX -> max.toFloat()
+                x > thumbEndX -> 0f
+                else -> (thumbEndX - x) / available
+            }
+        } else {
+            when {
+                x < thumbStartX -> 0f
+                x > thumbEndX -> max.toFloat()
+                else -> {
+                    val percentage = (x - thumbStartX) / available
+                    percentage * max
+                }
+            }
+        }
+
+        //     .       .       .
+        // |-------+-------+--------|
+        //    ^
+
+        // setHotspot(x, event.y.toInt())
+        progress = newProgress.roundToInt()
+        touchX = event.x
+    }
+
+    /**
+     * Tries to claim the user's drag motion, and requests disallowing any
+     * ancestors from stealing events in the drag.
+     */
+    private fun attemptClaimDrag() {
+        parent?.apply {
+            requestDisallowInterceptTouchEvent(true)
+        }
+    }
+
+    // Rendering //////////////////////////////////////////////////////////////
 
     /**
      * The moment for setting [thumbStartX] and [thumbEndX]. It could get triggered
@@ -169,4 +281,8 @@ abstract class StyledBaseSliderView : AppCompatSeekBar {
     protected open fun drawThumb(canvas: Canvas) {
         // DO NOTHING
     }
+
+    // override fun drawableHotspotChanged(x: Float, y: Float) {
+    //     super.drawableHotspotChanged(x, y)
+    // }
 }
