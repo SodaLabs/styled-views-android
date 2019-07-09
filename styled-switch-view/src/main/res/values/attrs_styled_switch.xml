@@ -15,6 +15,7 @@
         <attr name="swBorderColorOff" format="color" />
         <attr name="swBorderWidth" format="dimension" />
         <attr name="swColorDisabled" format="color" />
+        <attr name="swColorLabelDisabled" format="color" />
         <attr name="swTouchDragSlop" format="dimension" />
     </declare-styleable>
 </resources>

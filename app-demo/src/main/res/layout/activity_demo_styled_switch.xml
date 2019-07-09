@@ -33,6 +33,7 @@
     </android.support.v7.widget.Toolbar>
 
     <co.sodalabs.view.StyledSwitchView
+        android:id="@+id/swSwitch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:enabled="false"
@@ -45,11 +46,23 @@
         app:swBorderColorOff="#33677C"
         app:swBorderColorOn="#33677C"
         app:swBorderWidth="1dp"
-        app:swColorDisabled="#33677C"
+        app:swColorDisabled="#0Dffffff"
+        app:swColorLabelDisabled="#528592"
         app:swOn="true"
         app:swTextColorOff="#D6E0E4"
         app:swTextColorOn="#D6E0E4"
         app:swThumbColorOff="#D6E0E4"
         app:swThumbColorOn="#D6E0E4"
         app:swTouchDragSlop="2dp" />
+
+    <CheckBox
+        android:id="@+id/cbDisable"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/swSwitch"
+        app:layout_constraintEnd_toEndOf="@id/swSwitch"
+        app:layout_constraintTop_toBottomOf="@id/swSwitch"
+        android:layout_marginTop="4dp"
+        android:textColor="@color/white"
+        android:text="@string/disabled"/>
 </android.support.constraint.ConstraintLayout>
