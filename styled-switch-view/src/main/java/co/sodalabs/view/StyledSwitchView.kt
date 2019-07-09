@@ -124,7 +124,16 @@ class StyledSwitchView : ToggleableView {
     /**
      * Color for Switch disabled state
      */
-    var colorDisabled: Int = Color.parseColor("#D3D3D3")
+    var colorDisabled: Int = Color.parseColor("#0Dffffff")
+        set(value) {
+            field = value
+            postInvalidate()
+        }
+
+    /**
+     * Color for Switch disabled state
+     */
+    var colorLabelDisabled: Int = Color.parseColor("#528592")
         set(value) {
             field = value
             postInvalidate()
@@ -213,8 +222,8 @@ class StyledSwitchView : ToggleableView {
         for (i in 0 until attributes.indexCount) {
             when (attributes.getIndex(i)) {
                 R.styleable.StyledSwitchView_swOn -> setOnOff(attributes.getBoolean(R.styleable.StyledSwitchView_swOn, false), false)
-                R.styleable.StyledSwitchView_swColorDisabled -> colorDisabled = attributes.getColor(R.styleable.StyledSwitchView_swColorDisabled,
-                    Color.parseColor("#D3D3D3"))
+                R.styleable.StyledSwitchView_swColorDisabled -> colorDisabled = attributes.getColor(R.styleable.StyledSwitchView_swColorDisabled, Color.parseColor("#0Dffffff"))
+                R.styleable.StyledSwitchView_swColorLabelDisabled -> colorLabelDisabled = attributes.getColor(R.styleable.StyledSwitchView_swColorLabelDisabled, Color.parseColor("#528592"))
                 R.styleable.StyledSwitchView_swTextOn -> labelOn = attributes.getString(R.styleable.StyledSwitchView_swTextOn)
                 R.styleable.StyledSwitchView_swTextOff -> labelOff = attributes.getString(R.styleable.StyledSwitchView_swTextOff)
                 R.styleable.StyledSwitchView_swTextColorOn -> labelColorOn = attributes.getColor(R.styleable.StyledSwitchView_swTextColorOn, labelColorOn)
@@ -398,7 +407,11 @@ class StyledSwitchView : ToggleableView {
             val halfSize = paint.measureText("N") / 2f
 
             // Label-on
-            paint.color = Color.argb(alphaOn.xOneByte(), Color.red(thumbColorOn), Color.green(thumbColorOn), Color.blue(thumbColorOn))
+            paint.color = if (isEnabled) {
+                Color.argb(alphaOn.xOneByte(), Color.red(thumbColorOn), Color.green(thumbColorOn), Color.blue(thumbColorOn))
+            } else {
+                Color.argb(alphaOn.xOneByte(), Color.red(colorLabelDisabled), Color.green(colorLabelDisabled), Color.blue(colorLabelDisabled))
+            }
             canvas.drawText(
                 labelOn,
                 thumbOffCenterX,
@@ -406,7 +419,11 @@ class StyledSwitchView : ToggleableView {
                 paint)
 
             // Label-off
-            paint.color = Color.argb((1f - alphaOn).xOneByte(), Color.red(thumbColorOff), Color.green(thumbColorOff), Color.blue(thumbColorOff))
+            paint.color = if (isEnabled) {
+                Color.argb((1f - alphaOn).xOneByte(), Color.red(thumbColorOff), Color.green(thumbColorOff), Color.blue(thumbColorOff))
+            } else {
+                Color.argb((1f - alphaOn).xOneByte(), Color.red(colorLabelDisabled), Color.green(colorLabelDisabled), Color.blue(colorLabelDisabled))
+            }
             canvas.drawText(
                 labelOff,
                 thumbOnCenterX - paint.measureText(labelOff),
@@ -422,12 +439,16 @@ class StyledSwitchView : ToggleableView {
         paint.style = Paint.Style.FILL
 
         // Draw thumb for `on` state
-        paint.color = Color.argb(
-            255,
-            ((1f - alphaOn) * Color.red(thumbColorOff) + alphaOn * Color.red(thumbColorOn)).toInt(),
-            ((1f - alphaOn) * Color.green(thumbColorOff) + alphaOn * Color.green(thumbColorOn)).toInt(),
-            ((1f - alphaOn) * Color.blue(thumbColorOff) + alphaOn * Color.blue(thumbColorOn)).toInt()
-        )
+        paint.color = if (isEnabled) {
+            Color.argb(
+                255,
+                ((1f - alphaOn) * Color.red(thumbColorOff) + alphaOn * Color.red(thumbColorOn)).toInt(),
+                ((1f - alphaOn) * Color.green(thumbColorOff) + alphaOn * Color.green(thumbColorOn)).toInt(),
+                ((1f - alphaOn) * Color.blue(thumbColorOff) + alphaOn * Color.blue(thumbColorOn)).toInt()
+            )
+        } else {
+            colorDisabled
+        }
         canvas.drawCircle(thumbBounds.centerX(), thumbBounds.centerY(), thumbRadius, paint)
     }
 
